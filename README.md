@@ -1,1 +1,1 @@
-# 62533-62T22Appliedmachinelearningandbigdata
+# Course-Applied-Machine-Learning
