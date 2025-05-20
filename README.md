@@ -4,3 +4,8 @@ This repository contains the code and resources for the course "Applied Machine 
 Following repo contains two main folders:
 - `Coursework`: This folder contains the code and resources for the weekly tasks and assignments.
 - `Project`: This folder contains the code and resources for the final project of the course.
+
+## Disclaimer
+The retail dataset is ignore in git due to its size. Simply run the download_dataset.py script to download the dataset.
+
+The dataset itself is downloaded from UC Irvine Machine Learning Repository: https://archive.ics.uci.edu/
