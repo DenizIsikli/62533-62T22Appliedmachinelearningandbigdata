@@ -1,3 +1,7 @@
+# Name & Study Nr.
+# Deniz Isikli s215818
+# Mark Nielsen s204434
+
 import os
 import pandas as pd
 from tqdm import tqdm
