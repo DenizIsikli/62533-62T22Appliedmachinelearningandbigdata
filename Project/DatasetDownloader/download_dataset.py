@@ -21,9 +21,8 @@ class DatasetDownloader:
             - OnlineRetail.xlsx: The downloaded dataset file.
         """
 
-        # check first if the destination file exists, if it does, skip the download
         if os.path.exists(self.destination_path):
-            print(f"Dataset already exists at {self.destination_path}. Skipping download.")
+            print(f"Dataset already exists at {self.destination_path}. Skipping download.\n\n")
             return
 
         url = "https://archive.ics.uci.edu/ml/machine-learning-databases/00352/Online%20Retail.xlsx"
@@ -46,4 +45,4 @@ class DatasetDownloader:
                     bar.update(len(data))
             print(f"\n Dataset saved as '{self.destination_path}'")
         else:
-            print("Failed to download dataset. Please try manually.")
+            print("Failed to download dataset. Please try manually.\n\n")

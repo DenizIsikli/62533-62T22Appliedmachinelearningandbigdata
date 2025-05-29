@@ -18,14 +18,14 @@ class BaselineKmeansNumpy():
 
         Util.remove_folder_content(results_dir)
 
-        progress.set_description(steps[0])
+        progress.set_postfix_str(steps[0])
         df = pd.read_csv(file_path, index_col=0)
         progress.update(1)
 
         X = self.normalize(df.values)
         k = 4
 
-        progress.set_description(steps[1])
+        progress.set_postfix_str(steps[1])
         labels, centroids = self.kmeans(X, k)
         self.plot_clusters(X, labels, centroids)
         progress.update(1)
@@ -33,11 +33,11 @@ class BaselineKmeansNumpy():
         df['Cluster'] = labels
         df.to_csv(os.path.join(results_dir, "baseline_clusters.csv"), index=False)
 
-        progress.set_description(steps[2])
+        progress.set_postfix_str(steps[2])
         progress.update(1)
         
         progress.close()
-        print("Saved cluster assignments to baseline_clusters.csv")
+        print("Saved cluster assignments to baseline_clusters.csv\n\n")
 
     def normalize(self, X):
         """Normalize the dataset using z-score normalization.
@@ -136,5 +136,5 @@ class BaselineKmeansNumpy():
         plt.xlabel('Feature 1')
         plt.ylabel('Feature 2')
         plt.legend()
-        plt.savefig(os.path.join("Results", "BaselineKMeansNumpy", "clusters.png"))
+        plt.savefig(os.path.join("Results", "BaselineKMeansNumpy", "baselinekmeansnumpy.png"))
         plt.close()

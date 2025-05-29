@@ -19,28 +19,28 @@ class TaskModelSklearn():
 
         Util.remove_folder_content(results_dir)
 
-        progress.set_description(steps[0])
+        progress.set_postfix_str(steps[0])
         df = pd.read_csv(file_path, index_col=0)
         scaler = StandardScaler()
         X_scaled = scaler.fit_transform(df)
         progress.update(1)
 
-        progress.set_description(steps[1])
+        progress.set_postfix_str(steps[1])
         kmeans_labels, _ = self.run_kmeans(X_scaled, n_clusters=4)
         df['KMeansCluster'] = kmeans_labels
         progress.update(1)
 
-        progress.set_description(steps[2])
+        progress.set_postfix_str(steps[2])
         dbscan_labels, _ = self.run_dbscan(X_scaled, eps=1.5, min_samples=10)
         df['DBSCANCluster'] = dbscan_labels
         progress.update(1)
 
-        progress.set_description(steps[3])
+        progress.set_postfix_str(steps[3])
         df.to_csv(os.path.join(results_dir, "task_model_clusters.csv"), index=False)
         progress.update(1)
 
         progress.close()
-        print("Saved sklearn cluster results to task_model_clusters.csv")
+        print("Saved sklearn cluster results to task_model_clusters.csv\n\n")
 
     def run_kmeans(self, X, n_clusters=4):
         """Run KMeans clustering on the data.

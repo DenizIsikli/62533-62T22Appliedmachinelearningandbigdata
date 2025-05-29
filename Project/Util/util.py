@@ -15,5 +15,3 @@ class Util:
                 file_path = os.path.join(results_dir, filename)
                 if os.path.isfile(file_path):
                     os.remove(file_path)
-        else:
-            print(f"No files to remove in {results_dir} or directory does not exist.")

@@ -19,21 +19,21 @@ class DataProcessing():
 
         Util.remove_folder_content(results_dir)
 
-        progress.set_description(steps[0])
+        progress.set_postfix_str(steps[0])
         df = self.load_and_clean_data(file_path)
         progress.update(1)
 
-        progress.set_description(steps[1])
+        progress.set_postfix_str(steps[1])
         rfm_df = self.calculate_rfm(df, reference_date=pd.to_datetime("2011-12-10"))
         progress.update(1)
 
-        progress.set_description(steps[2])
+        progress.set_postfix_str(steps[2])
         rfm_df.to_csv(os.path.join(results_dir, "rfm_data.csv"))
         self.plot_rfm(rfm_df)
         progress.update(1)
 
         progress.close()
-        print("RFM features saved to rfm_data.csv")
+        print("Saved RFM features to rfm_data.csv\n\n")
 
     def load_and_clean_data(self, file_path):
         """Load and clean the Online Retail dataset.
@@ -83,7 +83,7 @@ class DataProcessing():
         sns.scatterplot(data=rfm_df, x='Recency', y='Monetary', hue='Frequency', palette='viridis')
         plt.title('RFM Analysis')
         plt.xlabel('Recency (days since last purchase)')
-        plt.ylabel('Monetary Value (total spending)')
+        plt.ylabel('Monetary Value (total spending in GBP)')
         plt.legend(title='Frequency (number of unique invoices)')
         
         script_dir = os.path.dirname(os.path.abspath(__file__))

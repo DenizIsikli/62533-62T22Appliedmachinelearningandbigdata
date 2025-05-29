@@ -25,33 +25,33 @@ class VisualizationAndEvaluation():
 
         Util.remove_folder_content(results_dir)
 
-        progress.set_description(steps[0])
+        progress.set_postfix_str(steps[0])
         df = pd.read_csv(file_path)
         features = ['Recency', 'Frequency', 'Monetary']
         scaler = StandardScaler()
         X_scaled = scaler.fit_transform(df[features])
         progress.update(1)
 
-        progress.set_description(steps[1])
+        progress.set_postfix_str(steps[1])
         self.plot_elbow(X_scaled, presentation)
         progress.update(1)
 
-        progress.set_description(steps[2])
-        self.plot_silhouette(X_scaled, df['KMeansCluster'])
+        progress.set_postfix_str(steps[2])
+        self.plot_silhouette(X_scaled, df['KMeansCluster'], presentation)
         progress.update(1)
 
-        progress.set_description(steps[3])
-        self.plot_pca(X_scaled, df['KMeansCluster'], "KMeans Clusters")
+        progress.set_postfix_str(steps[3])
+        self.plot_pca(X_scaled, df['KMeansCluster'], "KMeans Clusters", presentation)
         progress.update(1)
 
-        progress.set_description(steps[4])
-        self.plot_pca(X_scaled, df['DBSCANCluster'], "DBSCAN Clusters")
+        progress.set_postfix_str(steps[4])
+        self.plot_pca(X_scaled, df['DBSCANCluster'], "DBSCAN Clusters", presentation)
         progress.update(1)
 
         presentation.save(os.path.join(results_dir, "Cluster_Evaluation_Presentation.pptx"))
 
         progress.close()
-        print("Visualization and Evaluation completed.")
+        print("Visualization and Evaluation completed.\n\n")
 
     def plot_elbow(self, X, presentation=None):
         """Plot the elbow method to determine the optimal number of clusters for KMeans.
@@ -88,11 +88,14 @@ class VisualizationAndEvaluation():
             - A plot showing the silhouette score for the clustering.
         """
         score = silhouette_score(X, labels)
-        print(f'Silhouette Score: {score:.3f}')
 
         plt.bar(["Silhouette Score"], [score], color='skyblue')
         plt.ylim(0, 1)
         plt.title("Silhouette Score")
+        plt.ylabel("Score")
+        plt.xlabel("Clustering Method")
+        plt.axhline(y=score, color='r', linestyle='--', label=f'Silhouette Score: {score:.3f}')
+        plt.legend()
         filepath = "Results/VisualizationAndEvaluation/silhouette_score.png"
         plt.savefig(filepath)
         plt.close()
