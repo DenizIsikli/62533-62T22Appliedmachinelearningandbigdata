@@ -1,3 +1,7 @@
+# Name & Study Nr.
+# Deniz Isikli s215818
+# Mark Nielsen s204434
+
 from DatasetDownloader.download_dataset import DatasetDownloader
 from _1data_processing import DataProcessing
 from _2baseline_kmeans_numpy import BaselineKmeansNumpy

@@ -1,3 +1,7 @@
+# Name & Study Nr.
+# Deniz Isikli s215818
+# Mark Nielsen s204434
+
 import os
 import requests
 from tqdm import tqdm
