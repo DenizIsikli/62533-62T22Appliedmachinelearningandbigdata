@@ -2,6 +2,7 @@ import os
 import numpy as np
 import pandas as pd
 from tqdm import tqdm
+from Util.util import Util
 import matplotlib.pyplot as plt
 
 class BaselineKmeansNumpy():
@@ -11,8 +12,11 @@ class BaselineKmeansNumpy():
         progress = tqdm(total=len(steps), desc="KMeans Clustering", ncols=80)
 
         script_dir = os.path.dirname(os.path.abspath(__file__))
-        file_path = os.path.join(script_dir, "Results", "rfm_data.csv")
-        results_dir = os.path.join(script_dir, "Results")
+        file_path = os.path.join(script_dir, "Results", "DataProcessing", "rfm_data.csv")
+        os.makedirs(os.path.join(script_dir, "Results", "BaselineKMeansNumpy"), exist_ok=True)
+        results_dir = os.path.join(script_dir, "Results", "BaselineKMeansNumpy")
+
+        Util.remove_folder_content(results_dir)
 
         progress.set_description(steps[0])
         df = pd.read_csv(file_path, index_col=0)
@@ -23,6 +27,7 @@ class BaselineKmeansNumpy():
 
         progress.set_description(steps[1])
         labels, centroids = self.kmeans(X, k)
+        self.plot_clusters(X, labels, centroids)
         progress.update(1)
 
         df['Cluster'] = labels
@@ -115,3 +120,21 @@ class BaselineKmeansNumpy():
                 break
             centroids = new_centroids
         return labels, centroids
+
+    def plot_clusters(self, X, labels, centroids):
+        """Plot the clusters and centroids.
+
+        Args:
+            X (ndarray): The input data.
+            labels (ndarray): The cluster labels.
+            centroids (ndarray): The centroids of the clusters.
+        """
+        plt.figure(figsize=(10, 6))
+        plt.scatter(X[:, 0], X[:, 1], c=labels, cmap='viridis', marker='o', s=50, label='Data Points')
+        plt.scatter(centroids[:, 0], centroids[:, 1], c='red', marker='x', s=200, label='Centroids')
+        plt.title('KMeans Clustering')
+        plt.xlabel('Feature 1')
+        plt.ylabel('Feature 2')
+        plt.legend()
+        plt.savefig(os.path.join("Results", "BaselineKMeansNumpy", "clusters.png"))
+        plt.close()

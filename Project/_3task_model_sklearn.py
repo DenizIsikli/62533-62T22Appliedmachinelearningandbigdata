@@ -1,6 +1,7 @@
 import os
 import pandas as pd
 from tqdm import tqdm
+from Util.util import Util
 from sklearn.decomposition import PCA
 from sklearn.cluster import KMeans, DBSCAN
 from sklearn.preprocessing import StandardScaler
@@ -12,8 +13,11 @@ class TaskModelSklearn():
         progress = tqdm(total=len(steps), desc="Task Model (sklearn)", ncols=80)
 
         script_dir = os.path.dirname(os.path.abspath(__file__))
-        file_path = os.path.join(script_dir, "Results", "rfm_data.csv")
-        results_dir = os.path.join(script_dir, "Results")
+        file_path = os.path.join(script_dir, "Results", "DataProcessing", "rfm_data.csv")
+        os.makedirs(os.path.join(script_dir, "Results", "TaskModelSklearn"), exist_ok=True)
+        results_dir = os.path.join(script_dir, "Results", "TaskModelSklearn")
+
+        Util.remove_folder_content(results_dir)
 
         progress.set_description(steps[0])
         df = pd.read_csv(file_path, index_col=0)

@@ -1,7 +1,10 @@
 import os
 import numpy as np
 import pandas as pd
+import seaborn as sns
 from tqdm import tqdm
+from Util.util import Util
+import matplotlib.pyplot as plt
 
 class DataProcessing():
     def __init__(self):
@@ -11,7 +14,10 @@ class DataProcessing():
 
         script_dir = os.path.dirname(os.path.abspath(__file__))
         file_path = os.path.join(script_dir, "DatasetDownloader", "OnlineRetail.xlsx")
-        results_dir = os.path.join(script_dir, "Results")
+        os.makedirs(os.path.join(script_dir, "Results", "DataProcessing"), exist_ok=True)
+        results_dir = os.path.join(script_dir, "Results", "DataProcessing")
+
+        Util.remove_folder_content(results_dir)
 
         progress.set_description(steps[0])
         df = self.load_and_clean_data(file_path)
@@ -23,6 +29,7 @@ class DataProcessing():
 
         progress.set_description(steps[2])
         rfm_df.to_csv(os.path.join(results_dir, "rfm_data.csv"))
+        self.plot_rfm(rfm_df)
         progress.update(1)
 
         progress.close()
@@ -68,3 +75,18 @@ class DataProcessing():
         rfm.columns = ['Recency', 'Frequency', 'Monetary']
         rfm = rfm[rfm['Monetary'] > 0]  # Remove customers with 0 spending
         return rfm
+    
+    # plot the rfm data and save as png to the Results/DataProcessing folder
+    def plot_rfm(self, rfm_df):
+        """Plot the RFM data and save as a PNG file."""
+        plt.figure(figsize=(10, 6))
+        sns.scatterplot(data=rfm_df, x='Recency', y='Monetary', hue='Frequency', palette='viridis')
+        plt.title('RFM Analysis')
+        plt.xlabel('Recency (days since last purchase)')
+        plt.ylabel('Monetary Value (total spending)')
+        plt.legend(title='Frequency (number of unique invoices)')
+        
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        results_dir = os.path.join(script_dir, "Results", "DataProcessing")
+        plt.savefig(os.path.join(results_dir, "rfm_plot.png"))
+        plt.close()

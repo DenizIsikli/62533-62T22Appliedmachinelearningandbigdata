@@ -1,6 +1,7 @@
 import os
 import pandas as pd
 from tqdm import tqdm
+from Util.util import Util
 from pptx.util import Inches
 from pptx import Presentation
 import matplotlib.pyplot as plt
@@ -18,8 +19,11 @@ class VisualizationAndEvaluation():
         progress = tqdm(total=len(steps), desc="Evaluation & Visualization", ncols=80)
 
         script_dir = os.path.dirname(os.path.abspath(__file__))
-        file_path = os.path.join(script_dir, "Results", "task_model_clusters.csv")
-        results_dir = os.path.join(script_dir, "Results")
+        file_path = os.path.join(script_dir, "Results", "TaskModelSklearn", "task_model_clusters.csv")
+        os.makedirs(os.path.join(script_dir, "Results", "VisualizationAndEvaluation"), exist_ok=True)
+        results_dir = os.path.join(script_dir, "Results", "VisualizationAndEvaluation")
+
+        Util.remove_folder_content(results_dir)
 
         progress.set_description(steps[0])
         df = pd.read_csv(file_path)
@@ -67,7 +71,7 @@ class VisualizationAndEvaluation():
         plt.xlabel('Number of Clusters')
         plt.ylabel('Inertia (WCSS)')
         plt.title('Elbow Method')
-        filepath = "Results/elbow_plot.png"
+        filepath = "Results/VisualizationAndEvaluation/elbow_plot.png"
         plt.savefig(filepath)
         plt.close()
         if presentation:
@@ -89,7 +93,7 @@ class VisualizationAndEvaluation():
         plt.bar(["Silhouette Score"], [score], color='skyblue')
         plt.ylim(0, 1)
         plt.title("Silhouette Score")
-        filepath = "Results/silhouette_score.png"
+        filepath = "Results/VisualizationAndEvaluation/silhouette_score.png"
         plt.savefig(filepath)
         plt.close()
         if presentation:
@@ -112,7 +116,7 @@ class VisualizationAndEvaluation():
         plt.title(title)
         plt.xlabel("PCA 1")
         plt.ylabel("PCA 2")
-        filepath = f"Results/{title.replace(' ', '_').lower()}.png"
+        filepath = f"Results/VisualizationAndEvaluation/{title.replace(' ', '_').lower()}.png"
         plt.savefig(filepath)
         plt.close()
         if presentation:
