@@ -19,7 +19,7 @@ class VisualizationAndEvaluation():
         """Run the visualization and evaluation of clustering results."""
         presentation = Presentation()
 
-        steps = ["Loading & Scaling Data", "Plotting Elbow", "Calculating Silhouette", "Plotting KMeans PCA", "Plotting DBSCAN PCA"]
+        steps = ["Loading & Scaling Data", "Plotting Elbow", "Calculating Silhouette For Kmeans", "Calculating Silhouette For Dbscan", "Plotting KMeans PCA", "Plotting DBSCAN PCA"]
         progress = tqdm(total=len(steps), desc="Evaluation & Visualization", ncols=80)
 
         script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -41,14 +41,18 @@ class VisualizationAndEvaluation():
         progress.update(1)
 
         progress.set_postfix_str(steps[2])
-        self.plot_silhouette(X_scaled, df['KMeansCluster'], presentation)
+        self.plot_silhouette(X_scaled, df['KMeansCluster'], "KMeans", presentation)
         progress.update(1)
 
         progress.set_postfix_str(steps[3])
-        self.plot_pca(X_scaled, df['KMeansCluster'], "KMeans Clusters", "kmeans", presentation, iterations=df['KMeansCluster'].nunique())
+        self.plot_silhouette(X_scaled, df['DBSCANCluster'], "DBScan", presentation)
         progress.update(1)
 
         progress.set_postfix_str(steps[4])
+        self.plot_pca(X_scaled, df['KMeansCluster'], "KMeans Clusters", "kmeans", presentation, iterations=df['KMeansCluster'].nunique())
+        progress.update(1)
+
+        progress.set_postfix_str(steps[5])
         self.plot_pca(X_scaled, df['DBSCANCluster'], "DBSCAN Clusters", "dbscan", presentation, iterations=df['DBSCANCluster'].nunique())
         progress.update(1)
 
@@ -81,7 +85,7 @@ class VisualizationAndEvaluation():
         if presentation:
             self.add_plot_to_slide(filepath, "Elbow Method for KMeans", presentation)
 
-    def plot_silhouette(self, X, labels, presentation=None):
+    def plot_silhouette(self, X, labels, title, presentation=None):
         """Plot the silhouette score for the clustering.
 
         Args:
@@ -100,11 +104,11 @@ class VisualizationAndEvaluation():
         plt.xlabel("Clustering Method (Task Model KMeans)")
         plt.axhline(y=score, color='r', linestyle='--', label=f'Silhouette Score: {score:.3f}')
         plt.legend()
-        filepath = "Results/VisualizationAndEvaluation/silhouette_score.png"
+        filepath = f"Results/VisualizationAndEvaluation/{title.lower().replace(' ', '_')}_silhouette_plot.png"
         plt.savefig(filepath)
         plt.close()
         if presentation:
-            self.add_plot_to_slide(filepath, "Silhouette Score", presentation)
+            self.add_plot_to_slide(filepath, title, presentation)
 
     def plot_pca(self, X, labels, title, filename, presentation=None, iterations=None):
         """Plot the PCA components of the data.
