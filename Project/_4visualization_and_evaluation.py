@@ -45,11 +45,11 @@ class VisualizationAndEvaluation():
         progress.update(1)
 
         progress.set_postfix_str(steps[3])
-        self.plot_pca(X_scaled, df['KMeansCluster'], "KMeans Clusters", presentation)
+        self.plot_pca(X_scaled, df['KMeansCluster'], "KMeans Clusters", "kmeans", presentation, iterations=df['KMeansCluster'].nunique())
         progress.update(1)
 
         progress.set_postfix_str(steps[4])
-        self.plot_pca(X_scaled, df['DBSCANCluster'], "DBSCAN Clusters", presentation)
+        self.plot_pca(X_scaled, df['DBSCANCluster'], "DBSCAN Clusters", "dbscan", presentation, iterations=df['DBSCANCluster'].nunique())
         progress.update(1)
 
         presentation.save(os.path.join(results_dir, "Cluster_Evaluation_Presentation.pptx"))
@@ -106,7 +106,7 @@ class VisualizationAndEvaluation():
         if presentation:
             self.add_plot_to_slide(filepath, "Silhouette Score", presentation)
 
-    def plot_pca(self, X, labels, title, presentation=None):
+    def plot_pca(self, X, labels, title, filename, presentation=None, iterations=None):
         """Plot the PCA components of the data.
 
         Args:
@@ -121,9 +121,12 @@ class VisualizationAndEvaluation():
         components = pca.fit_transform(X)
         plt.scatter(components[:, 0], components[:, 1], c=labels, cmap='tab10', s=40)
         plt.title(title)
+        if iterations is not None:
+            title += f" (Converged in {iterations} iterations)"
+            plt.title(title)
         plt.xlabel("PCA 1")
         plt.ylabel("PCA 2")
-        filepath = f"Results/VisualizationAndEvaluation/{title.replace(' ', '_').lower()}.png"
+        filepath = f"Results/VisualizationAndEvaluation/{filename}_pca_plot.png"
         plt.savefig(filepath)
         plt.close()
         if presentation:

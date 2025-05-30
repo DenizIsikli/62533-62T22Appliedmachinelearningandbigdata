@@ -8,6 +8,7 @@ import pandas as pd
 from tqdm import tqdm
 from Util.util import Util
 import matplotlib.pyplot as plt
+from sklearn.metrics import silhouette_score
 
 class BaselineKmeansNumpy():
     def __init__(self):
@@ -30,8 +31,8 @@ class BaselineKmeansNumpy():
         k = 4
 
         progress.set_postfix_str(steps[1])
-        labels, centroids = self.kmeans(X, k)
-        self.plot_clusters(X, labels, centroids)
+        labels, centroids, iterations = self.kmeans(X, k, max_iters=100)
+        self.plot_clusters(X, labels, centroids, iterations)
         self.plot_silhouette(X, labels)
         progress.update(1)
 
@@ -105,7 +106,7 @@ class BaselineKmeansNumpy():
         """
         return np.array([X[labels == i].mean(axis=0) for i in range(k)])
 
-    def kmeans(self, X, k, max_iters=100):
+    def kmeans(self, X, k, max_iters):
         """KMeans clustering algorithm.
 
         Args:
@@ -124,7 +125,7 @@ class BaselineKmeansNumpy():
             if np.allclose(centroids, new_centroids):
                 break
             centroids = new_centroids
-        return labels, centroids
+        return labels, centroids, i+1
     
     def plot_silhouette(self, X, labels):
         """Plot the silhouette score for the clustering.
@@ -133,8 +134,6 @@ class BaselineKmeansNumpy():
             X (ndarray): The input data.
             labels (ndarray): The cluster labels.
         """
-        from sklearn.metrics import silhouette_score
-
         score = silhouette_score(X, labels)
         plt.figure(figsize=(8, 5))
         plt.bar(["Silhouette Score"], [score], color='skyblue')
@@ -147,7 +146,7 @@ class BaselineKmeansNumpy():
         plt.savefig(os.path.join("Results", "BaselineKMeansNumpy", "silhouette_score.png"))
         plt.close()
 
-    def plot_clusters(self, X, labels, centroids):
+    def plot_clusters(self, X, labels, centroids=None, iterations=None):
         """Plot the clusters and centroids.
 
         Args:
@@ -155,12 +154,17 @@ class BaselineKmeansNumpy():
             labels (ndarray): The cluster labels.
             centroids (ndarray): The centroids of the clusters.
         """
+        title = "KMeans Clustering"
+
         plt.figure(figsize=(10, 6))
         plt.scatter(X[:, 0], X[:, 1], c=labels, cmap='viridis', marker='o', s=50, label='Data Points')
         plt.scatter(centroids[:, 0], centroids[:, 1], c='red', marker='x', s=200, label='Centroids')
-        plt.title('KMeans Clustering')
+        plt.title(title)
+        if iterations is not None:
+            title += f" (Converged in {iterations} iterations)"
+            plt.title(title)
         plt.xlabel('Feature 1')
         plt.ylabel('Feature 2')
         plt.legend()
-        plt.savefig(os.path.join("Results", "BaselineKMeansNumpy", "baselinekmeansnumpy.png"))
+        plt.savefig(os.path.join("Results", "BaselineKMeansNumpy", "baselinemodel_clusters_visualization.png"))
         plt.close()

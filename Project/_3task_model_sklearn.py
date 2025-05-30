@@ -6,6 +6,7 @@ import os
 import pandas as pd
 from tqdm import tqdm
 from Util.util import Util
+import matplotlib.pyplot as plt
 from sklearn.decomposition import PCA
 from sklearn.cluster import KMeans, DBSCAN
 from sklearn.preprocessing import StandardScaler
@@ -30,7 +31,8 @@ class TaskModelSklearn():
         progress.update(1)
 
         progress.set_postfix_str(steps[1])
-        kmeans_labels, _ = self.run_kmeans(X_scaled, n_clusters=4)
+        kmeans_labels, kmeans_model = self.run_kmeans(X_scaled, n_clusters=4)
+        self.plot_clusters(X_scaled, kmeans_labels, centroids=kmeans_model.cluster_centers_, iterations=kmeans_model.n_iter_)
         df['KMeansCluster'] = kmeans_labels
         progress.update(1)
 
@@ -61,7 +63,7 @@ class TaskModelSklearn():
         labels = model.fit_predict(X)
         return labels, model
 
-    def run_dbscan(self, X, eps=0.5, min_samples=5):
+    def run_dbscan(self, X, eps, min_samples):
         """Run DBSCAN clustering on the data.
 
         Args:
@@ -76,3 +78,20 @@ class TaskModelSklearn():
         model = DBSCAN(eps=eps, min_samples=min_samples)
         labels = model.fit_predict(X)
         return labels, model
+
+    def plot_clusters(self, X, labels, centroids=None, iterations=None):
+        title = "Clusters Visualization"
+
+        plt.figure(figsize=(10, 6))
+        plt.scatter(X[:, 0], X[:, 1], c=labels, cmap='viridis', marker='o', s=50, alpha=0.6)
+        plt.scatter(centroids[:, 0], centroids[:, 1], c='red', marker='x', s=200, label='Centroids') if centroids is not None else None
+        plt.title(title)
+        if iterations is not None:
+            title += f" (Converged in {iterations} iterations)"
+            plt.title(title)
+        plt.xlabel('Feature 1')
+        plt.ylabel('Feature 2')
+        plt.legend()
+        plt.savefig(os.path.join("Results", "TaskModelSklearn", "taskmodel_clusters_visualization.png"))
+        plt.close()
+        
