@@ -97,7 +97,7 @@ class VisualizationAndEvaluation():
         plt.ylim(0, 1)
         plt.title("Silhouette Score")
         plt.ylabel("Score")
-        plt.xlabel("Clustering Method")
+        plt.xlabel("Clustering Method (Task Model KMeans)")
         plt.axhline(y=score, color='r', linestyle='--', label=f'Silhouette Score: {score:.3f}')
         plt.legend()
         filepath = "Results/VisualizationAndEvaluation/silhouette_score.png"
