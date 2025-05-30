@@ -32,6 +32,7 @@ class BaselineKmeansNumpy():
         progress.set_postfix_str(steps[1])
         labels, centroids = self.kmeans(X, k)
         self.plot_clusters(X, labels, centroids)
+        self.plot_silhouette(X, labels)
         progress.update(1)
 
         df['Cluster'] = labels
@@ -124,6 +125,27 @@ class BaselineKmeansNumpy():
                 break
             centroids = new_centroids
         return labels, centroids
+    
+    def plot_silhouette(self, X, labels):
+        """Plot the silhouette score for the clustering.
+
+        Args:
+            X (ndarray): The input data.
+            labels (ndarray): The cluster labels.
+        """
+        from sklearn.metrics import silhouette_score
+
+        score = silhouette_score(X, labels)
+        plt.figure(figsize=(8, 5))
+        plt.bar(["Silhouette Score"], [score], color='skyblue')
+        plt.ylim(0, 1)
+        plt.title("Silhouette Score")
+        plt.ylabel("Score")
+        plt.xlabel("Clustering Method (Baseline KMeans Numpy)")
+        plt.axhline(y=score, color='r', linestyle='--', label=f'Silhouette Score: {score:.3f}')
+        plt.legend()
+        plt.savefig(os.path.join("Results", "BaselineKMeansNumpy", "silhouette_score.png"))
+        plt.close()
 
     def plot_clusters(self, X, labels, centroids):
         """Plot the clusters and centroids.
