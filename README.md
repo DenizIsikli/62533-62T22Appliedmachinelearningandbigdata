@@ -32,4 +32,20 @@ The data is originally from the UC Irvine Machine Learning Repository:
 https://archive.ics.uci.edu/ml/datasets/online+retail
 
 ## Execution
-Simply run the `main.py` script to execute the full pipeline:
+Simply run the `main.py` script to execute the full pipeline.
+
+### Results
+The results will be saved in the `Results/` directory, inside subfolders for each python script. The results include:
+- DataProcessing/ (_1data_processing.py_)
+- BaselineKMeansNumpy/ (_2baseline_kmeans_numpy.py_)
+- TaskModelSklearn/ (_3task_model_sklearn.py_)
+- VisualizationEvaluation/ (_4visualization_evaluation.py_)
+
+## Requirements
+To run the code, you need Python 3.8 or higher and the following packages:
+```bash
+pip install -r requirements.txt
+```
+
+## License
+MIT License (MIT) – see the LICENSE file for details.
