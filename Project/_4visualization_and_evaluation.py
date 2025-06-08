@@ -41,11 +41,11 @@ class VisualizationAndEvaluation():
         progress.update(1)
 
         progress.set_postfix_str(steps[2])
-        self.plot_silhouette(X_scaled, df['KMeansCluster'], "KMeans", presentation)
+        self.plot_silhouette(X_scaled, df['KMeansCluster'], "KMeans", "KMeans", presentation)
         progress.update(1)
 
         progress.set_postfix_str(steps[3])
-        self.plot_silhouette(X_scaled, df['DBSCANCluster'], "DBScan", presentation)
+        self.plot_silhouette(X_scaled, df['DBSCANCluster'], "DBScan", "DBScan", presentation)
         progress.update(1)
 
         progress.set_postfix_str(steps[4])
@@ -85,7 +85,7 @@ class VisualizationAndEvaluation():
         if presentation:
             self.add_plot_to_slide(filepath, "Elbow Method for KMeans", presentation)
 
-    def plot_silhouette(self, X, labels, title, presentation=None):
+    def plot_silhouette(self, X, labels, title, model, presentation=None):
         """Plot the silhouette score for the clustering.
 
         Args:
@@ -101,7 +101,7 @@ class VisualizationAndEvaluation():
         plt.ylim(0, 1)
         plt.title("Silhouette Score")
         plt.ylabel("Score")
-        plt.xlabel("Clustering Method (Task Model KMeans)")
+        plt.xlabel(f"Silhouette Score for {model}")
         plt.axhline(y=score, color='r', linestyle='--', label=f'Silhouette Score: {score:.3f}')
         plt.legend()
         filepath = f"Results/VisualizationAndEvaluation/{title.lower().replace(' ', '_')}_silhouette_plot.png"
