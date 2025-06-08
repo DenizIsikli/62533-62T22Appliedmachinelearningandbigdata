@@ -31,6 +31,8 @@ The retail dataset is ignored in Git due to its size, but it will be downloaded 
 The data is originally from the UC Irvine Machine Learning Repository:  
 https://archive.ics.uci.edu/ml/datasets/online+retail
 
+Run the DatasetDownloader/`download_dataset.py` script to download the Online Retail dataset. The script will save the dataset in the `DatasetDownloader/` directory.
+
 ## Execution
 Simply run the `main.py` script to execute the full pipeline.
 
