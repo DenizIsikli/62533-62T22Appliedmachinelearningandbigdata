@@ -89,8 +89,8 @@ class TaskModelSklearn():
         if iterations is not None:
             title += f" (Converged in {iterations} iterations)"
             plt.title(title)
-        plt.xlabel('Feature 1')
-        plt.ylabel('Feature 2')
+        plt.xlabel('Recency (z-score normalized)')
+        plt.ylabel('Frequency (z-score normalized)')
         plt.legend()
         plt.savefig(os.path.join("Results", "TaskModelSklearn", "taskmodel_clusters_visualization.png"))
         plt.close()
